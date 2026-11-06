@@ -1,0 +1,4 @@
+base_vectorielle/
+.venv/
+__pycache__/
+corpus_altea/
