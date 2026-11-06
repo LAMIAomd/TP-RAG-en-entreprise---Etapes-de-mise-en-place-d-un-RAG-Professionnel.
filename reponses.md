@@ -93,23 +93,3 @@ leur place dans un dépôt de code. Un collègue qui clone le dépôt installe l
 (`pip install -r requirements.txt`), puis lance `python rag_altea/etape4_indexation.py`, qui
 reconstruit la base.
 
-## Exercice 2
-
-### Étape 5 - Recherche
-
-**Q1.** [À COMPLÉTER : coller les résultats (source, page, score) des 3 questions]
-
-**Q2.** Avec k = 1, on obtient un seul chunk : précis, mais on risque de rater l'information
-si ce n'est pas le bon. Quand k augmente, on gagne en **rappel** (plus de chances que le bon
-passage soit parmi les résultats, utile si la réponse est répartie sur plusieurs chunks).
-On perd en **précision** : les derniers résultats ont des scores plus faibles et sont souvent
-hors sujet, ce qui ajoute du bruit, allonge le prompt envoyé au LLM (plus lent) et augmente le
-risque qu'il mélange des informations. [À COMPLÉTER : citer les scores observés pour k = 10]
-
-**Q3.** [À COMPLÉTER : ce que tu observes] Avec service="RH", on obtient uniquement des chunks RH
-pertinents. Avec service="IT", on obtient seulement des chunks IT, avec des scores plus faibles
-et sans lien avec la question : le filtre restreint bien le périmètre de recherche.
-C'est une première étape vers la confidentialité : on peut réserver à chaque service ses
-propres documents. Mais cela ne suffit pas : c'est l'appelant qui choisit le service, sans
-authentification ni droits par utilisateur ; il n'y a pas de contrôle de qui pose la question,
-et une simple étiquette de métadonnée n'est pas une vraie gestion des accès.
