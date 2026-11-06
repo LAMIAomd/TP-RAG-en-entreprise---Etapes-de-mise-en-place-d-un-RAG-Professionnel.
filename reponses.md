@@ -62,13 +62,13 @@ Chaque morceau reprend la dernière lettre du précédent (d, puis g) : c'est le
 ### Étape 4 - Embeddings et indexation
 
 **Q8.** Le modèle `paraphrase-multilingual-MiniLM-L12-v2` produit des vecteurs de dimension
-**384** (shape = (3, 384) pour 3 phrases). Avec 69 chunks : 69 x 384 = **26 496 nombres**.
-(Si ton nombre de chunks est différent : nombre de chunks x 384.)
+384 (shape = (3, 384) pour 3 phrases). Avec 69 chunks : 69 x 384 = **26 496 nombres**.
 
 **Q9.** 
 Les phrases 1 (« Comment poser un jour de congé ? ») et 2 (« Quelle est la procédure pour
 demander des vacances ? ») sont proches (valeur élevée dans la matrice), alors que la phrase 3
-(sur le VPN) est éloignée des deux. Les phrases 1 et 2 n'ont presque aucun mot en commun, mais
+(sur le VPN) est éloignée des deux. 
+Les phrases 1 et 2 n'ont presque aucun mot en commun, mais
 le modèle d'embedding représente le **sens** et non les mots : « congé » et « vacances »,
 « poser » et « demander » sont proches dans l'espace des vecteurs.
 
@@ -114,6 +114,27 @@ Le dernier résultat montre qu'une recherche vectorielle renvoie quand même des
 - **k = 1** : on récupère uniquement le passage le plus proche. Le contexte envoyé au LLM est court et généralement plus ciblé, mais on risque de manquer une information utile présente dans un autre chunk.
 - **k = 3** : on dispose de davantage de contexte et on augmente les chances de retrouver le bon passage, sans trop alourdir le prompt. C'est la valeur retenue par défaut dans le projet.
 - **k = 10** : on augmente encore les chances de retrouver le bon document, mais certains passages peuvent être moins pertinents. Le prompt devient plus long et le LLM peut être perturbé par du bruit.
+
+k = 1
+  conges_absences.pdf | page 1 | service RH | score 0.582
+
+k = 3
+  conges_absences.pdf | page 1 | service RH | score 0.582
+  conges_absences.pdf | page 2 | service RH | score 0.525
+  conges_absences.pdf | page 2 | service RH | score 0.475
+
+k = 10
+  conges_absences.pdf | page 1 | service RH | score 0.582
+  conges_absences.pdf | page 2 | service RH | score 0.525
+  conges_absences.pdf | page 2 | service RH | score 0.475
+  conges_absences.pdf | page 1 | service RH | score 0.443
+  conges_absences.pdf | page 1 | service RH | score 0.390
+  teletravail.pdf | page 1 | service RH | score 0.376
+  teletravail.pdf | page 1 | service RH | score 0.370
+  horaires.txt | page 1 | service General | score 0.351
+  conges_absences.pdf | page 2 | service RH | score 0.340
+  livret_accueil.pdf | page 2 | service General | score 0.324
+  
 
 **Q3.** Avec `service="RH"`, la recherche est limitée aux chunks dont la métadonnée `service` vaut `RH`. Avec `service="IT"`, elle ne cherche que dans les documents du service informatique. Pour une question sur les congés, les résultats RH devraient donc être plus pertinents que les résultats IT.
 
